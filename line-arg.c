@@ -253,7 +253,7 @@ isOptChr( char* c ) {
     else
         return isgraph( *c ) &&
                 *c != '[' && *c != ']' &&
-                *c != '<' && *c != '>';
+                *c != '{' && *c != '}';
 }
 
 static char*
@@ -480,9 +480,9 @@ again:
             err = parseGroup( par, '[', ']' );
             parsedOne = true;
         break;
-        case '<':
+        case '{':
             uAdv( par );
-            err = parseGroup( par, '<', '>' );
+            err = parseGroup( par, '{', '}' );
         break;
         default:
             err = parseParam( par );
@@ -593,7 +593,7 @@ findOptionShort( lnA_Parser* par, char name ) {
         lnA_Option* opt = oIt;
         oIt = oIt->next;
         
-        if( !oIt->sForm )
+        if( !opt->sForm )
             continue;
         
         if( contains( opt->sForm, strlen(opt->sForm), name ) )
@@ -630,14 +630,14 @@ validateOptional( lnA_Parser* par ) {
     
     while( uPeek( par ) != ']' ) {
         char c = uNext( par );
-        if( c == '>' || c == '\0' )
+        if( c == '}' || c == '\0' )
             return error( par, "Unterminated optional group" );
         if( c == '[' ) {
             char* err = validateOptional( par );
             if( err )
                 return err;
         }
-        if( c == '<' ) {
+        if( c == '{' ) {
             char* err = validateRequired( par );
             if( err )
                 return err;
@@ -656,7 +656,7 @@ validateRequired( lnA_Parser* par ) {
     while( isspace( uPeek( par ) ) )
         uAdv( par );
     
-    while( uPeek( par ) != '>' ) {
+    while( uPeek( par ) != '}' ) {
         char c = uNext( par );
         if( c == ']' || c == '\0' )
             return error( par, "Unterminated optional group" );
@@ -665,7 +665,7 @@ validateRequired( lnA_Parser* par ) {
             if( err )
                 return err;
         }
-        if( c == '<' ) {
+        if( c == '{' ) {
             char* err = validateRequired( par );
             if( err )
                 return err;
@@ -686,14 +686,14 @@ validate( lnA_Parser* par  ) {
     
     while( uPeek( par ) != '\0' ) {
         char c = uNext( par );
-        if( c == ']' || c == '>' )
+        if( c == ']' || c == '}' )
             return error( par, "Stray bracket" );
         if( c == '[' ) {
             char* err = validateOptional( par );
             if( err )
                 return err;
         }
-        if( c == '<' ) {
+        if( c == '{' ) {
             char* err = validateRequired( par );
             if( err )
                 return err;

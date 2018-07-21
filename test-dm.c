@@ -19,7 +19,7 @@ paramCb( char* arg ) {
 int
 main( int argc, char** argv ) {
     par = lnA_makeParser( "programName" );
-    usg = lnA_addUsage( par, "< params... | [-h | --help] >" );
+    usg = lnA_addUsage( par, "{ params... | [-h | --help] }" );
     
     lnA_addOption( par, "h", "help", "Displays usage info", &helpCb );
     lnA_addParam( par, "params", &paramCb );

@@ -18,7 +18,7 @@ is passed to the parameter callback bound to the name.
     "MY-PARAM"
 
 The name can have basically any graphic ASCII characters
-except '[', ']', '<', and '>'.  They also can't begin with
+except '[', ']', '{', and '}'.  They also can't begin with
 a hyphen '-' since that denotes options.  They also can't
 contain three consecutive periods '...' since that denotes
 a sequence.
@@ -69,10 +69,10 @@ one will be used.
 Required groups are similar to optional groups in form, but
 are required to be present in at least one valid form.  When
 matching sequences at least one match is required.  Required
-groups are enclosed in arrow brackets <...> and alternatives
+groups are enclosed in curly brackets {...} and alternatives
 are separated by bars '|'.
 
-    "<-a | -b | -c | -d>"
+    "{-a | -b | -c | -d}"
 
 ### Sequences
 Sequences are denoted by '...' after one of the previously
@@ -82,7 +82,7 @@ matched at least once, except for sequences of optional
 groups.
 
     "FILES..."
-    "<-i | -o>..."
+    "{-i | -o}..."
     "[-f]..."
     "-AaBb..."
     "--something=otherthing..."
@@ -124,7 +124,7 @@ To create a parser we just say:
 
 Next we add a usage string:
 
-    lnA_Usage* usg = lnA_addUsage( par, "< params... | [-h | --help] >" );
+    lnA_Usage* usg = lnA_addUsage( par, "{ params... | [-h | --help] }" );
 
 This represents a parser for that specific usage string,
 when multiple usage options are possible it becomes difficult
@@ -226,7 +226,7 @@ what we have is:
     int
     main( int argc, char** argv ) {
         par = lnA_makeParser( "programName" );
-        usg = lnA_addUsage( par, "< params... | [-h | --help] >" );
+        usg = lnA_addUsage( par, "{ params... | [-h | --help] }" );
         
         lnA_addOption( par, "h", "help", "Displays usage info", &helpCb );
         lnA_addParam( par, "params", &paramCb );
@@ -258,7 +258,7 @@ Or perhaps more simply as:
 
 **Note** the order of our usage string, lnA isn't very smart;
 it tries alternatives in order from left to right.  So if we
-reverse the order of our alternatives and say "< [-h | --help] | params...] >"
+reverse the order of our alternatives and say "{ [-h | --help] | params...] }"
 it'll first attempt to match the optional first alternative, failing
 that it won't try any others or throw an error since the form is
 optional.
