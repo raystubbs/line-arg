@@ -111,7 +111,7 @@ generate the usage text, which follow common unix conventions.
 
 We only need one header file:
 
-    #include <ln-arg.h>
+    #include <line-arg.h>
 
 But for printing and whatnot we use some others:
 
@@ -206,7 +206,7 @@ what we have is:
 
     #include <stdlib.h>
     #include <stdio.h>
-    #include "line-arg.h"
+    #include <line-arg.h>
     
     lnA_Parser* par = NULL;
     lnA_Usage*  usg = NULL;
@@ -249,11 +249,11 @@ And we can build with something like:
     cd ln-arg
     make
     cd ..
-    gcc -Lln-arg -llnA -Iln-arg my-program.c
+    gcc -Lline-arg -llnA -Iline-arg my-program.c
 
 Or perhaps more simply as:
 
-    gcc ln-arg/ln-arg.c my-program.c
+    gcc -Iline-arg line-arg/line-arg.c my-program.c
 
 
 **Note** the order of our usage string, lnA isn't very smart;
