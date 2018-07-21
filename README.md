@@ -246,7 +246,7 @@ what we have is:
 
 And we can build with something like:
 
-    cd ln-arg
+    cd line-arg
     make
     cd ..
     gcc -Lline-arg -llnA -Iline-arg my-program.c
