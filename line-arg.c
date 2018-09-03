@@ -27,7 +27,7 @@ typedef struct lnA_Option {
 
 typedef struct lnA_Queued {
     void
-    (*callback)( char* str );
+    (*callback)( char* str, void* udata );
     
     char* str;
     
@@ -53,13 +53,16 @@ typedef struct lnA_Parser {
     unsigned     uIdx;   // Index into usage string
     char**       argv;   // Current argument list
     unsigned     aIdx;   // Index into argument list
+    
+    void*        udata;  // User data passed to callbacks.
 } lnA_Parser;
 
 lnA_Parser*
-lnA_makeParser( char* name ) {
+lnA_makeParser( char* name, void* udata ) {
     lnA_Parser* par = malloc( sizeof(lnA_Parser) );
     *par = (lnA_Parser){ 0 };
     par->pName = name;
+    par->udata = udata;
     return par;
 }
 
@@ -197,7 +200,11 @@ static char*
 parseThing( lnA_Parser* par );
 
 static void
-queueCallback( lnA_Parser* par, void (*cb)( char* str ), char* str );
+queueCallback( 
+    lnA_Parser* par,
+    void        (*cb)( char* str, void* udata ),
+    char*       str
+);
 
 static void
 queueCallbacks( lnA_Parser* par, lnA_Queue* src );
@@ -509,8 +516,13 @@ again:
         return err;
 }
 
+
 static void
-queueCallback( lnA_Parser* par, void (*cb)( char* str ), char* str ) {
+queueCallback( 
+    lnA_Parser* par,
+    void        (*cb)( char* str, void* udata ),
+    char*       str
+) {
     lnA_Queued* c = malloc(sizeof(lnA_Queued));
     c->callback = cb;
     c->str = str;
@@ -541,7 +553,7 @@ static void
 invokeCallbacks( lnA_Parser* par ) {
     lnA_Queued* qIt = par->qNow->first;
     while( qIt ) {
-        qIt->callback( qIt->str );
+        qIt->callback( qIt->str, par->udata );
         qIt = qIt->next;
     }
 }

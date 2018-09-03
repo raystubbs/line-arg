@@ -6,19 +6,19 @@ lnA_Parser* par = NULL;
 lnA_Usage*  usg = NULL;
 
 void
-helpCb( char* opt ) {
+helpCb( char* opt, void* udata ) {
     lnA_printUsage( par );
     exit( 1 );
 }
 
 void
-paramCb( char* arg ) {
+paramCb( char* arg, void* udata ) {
     printf( "Got argument: %s\n", arg );
 }
 
 int
 main( int argc, char** argv ) {
-    par = lnA_makeParser( "programName" );
+    par = lnA_makeParser( "programName", NULL );
     usg = lnA_addUsage( par, "{ params... | [-h | --help] }" );
     
     lnA_addOption( par, "h", "help", "Displays usage info", &helpCb );

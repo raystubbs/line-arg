@@ -7,13 +7,13 @@ typedef struct lnA_Parser lnA_Parser;
 typedef struct lnA_Usage  lnA_Usage;
 
 typedef void
-(*lnA_ParamCb)( char* arg );
+(*lnA_ParamCb)( char* arg, void* udata );
 
 typedef void
-(*lnA_OptionCb)( char* opt );
+(*lnA_OptionCb)( char* opt, void* udata );
 
 lnA_Parser*
-lnA_makeParser( char* name );
+lnA_makeParser( char* name, void* udata );
 
 void
 lnA_freeParser( lnA_Parser* par );
