@@ -309,7 +309,8 @@ parseLong( lnA_Parser* par ) {
     
     // Queue callbacks, will be called only if
     // unit completes without errors
-    queueCallback( par, opt->callback, opt->lForm );
+    if( opt->callback )
+        queueCallback( par, opt->callback, opt->lForm );
     lnA_Param* prm = findParam( par, &uStr[uBrk+1], uLen - uBrk - 1 );
     if( prm && prm->callback )
         queueCallback( par, prm->callback, &aStr[aBrk+1] );
